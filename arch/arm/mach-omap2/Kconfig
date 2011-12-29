@@ -179,6 +179,13 @@ config MACH_OVERO
 	default y
 	select OMAP_PACKAGE_CBB
 
+config MACH_USRP_E100
+	bool "Ettus Research USRP-E100"
+	depends on ARCH_OMAP3
+	default y
+	select OMAP_PACKAGE_CBB
+	select MACH_OVERO
+
 config MACH_OMAP3EVM
 	bool "OMAP 3530 EVM board"
 	depends on ARCH_OMAP3
