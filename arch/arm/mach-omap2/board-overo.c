@@ -683,7 +683,7 @@ static void __init usrp1_e_init(void)
 
 	printk("Setup up gpmc timing.\n");
 
-// Set up CS4, data read/write
+	// Set up CS4, data read/write
 
 	gpmc_cs_write_reg(4, GPMC_CS_CONFIG7, 0x0);
 	udelay(100);
@@ -691,7 +691,7 @@ static void __init usrp1_e_init(void)
 #if 1
 	// Signal control parameters per chip select
 	tmp = gpmc_cs_read_reg(4, GPMC_CS_CONFIG1);
-//	tmp |= (GPMC_CONFIG1_MUXADDDATA);
+	//tmp |= (GPMC_CONFIG1_MUXADDDATA);
 	tmp |= (GPMC_CONFIG1_WRITETYPE_SYNC);
 	tmp |= (GPMC_CONFIG1_READTYPE_SYNC);
 	tmp |= (GPMC_CONFIG1_FCLK_DIV(2));
@@ -711,12 +711,12 @@ static void __init usrp1_e_init(void)
 
 #if 1
 	// nADV signal timing parameter configuration
-        tmp = 0;
-        tmp |= GPMC_CONFIG3_ADVONTIME(1);
-        tmp |= GPMC_CONFIG3_ADVRDOFFTIME(2);
-        tmp |= GPMC_CONFIG3_ADVWROFFTIME(2);
-        printk("GPMC_CONFIG3 reg: %x\n", tmp);
-        gpmc_cs_write_reg(4, GPMC_CS_CONFIG3, tmp);
+	tmp = 0;
+	tmp |= GPMC_CONFIG3_ADVONTIME(1);
+	tmp |= GPMC_CONFIG3_ADVRDOFFTIME(2);
+	tmp |= GPMC_CONFIG3_ADVWROFFTIME(2);
+	printk("GPMC_CONFIG3 reg: %x\n", tmp);
+	gpmc_cs_write_reg(4, GPMC_CS_CONFIG3, tmp);
 #endif
 
 #if 1
@@ -761,9 +761,9 @@ static void __init usrp1_e_init(void)
 #if 1
 	// Signal control parameters per chip select
 	tmp = gpmc_cs_read_reg(6, GPMC_CS_CONFIG1);
-//	tmp |= (GPMC_CONFIG1_MUXADDDATA);
-//	tmp |= (GPMC_CONFIG1_WRITETYPE_SYNC);
-//	tmp |= (GPMC_CONFIG1_READTYPE_SYNC);
+	//tmp |= (GPMC_CONFIG1_MUXADDDATA);
+	//tmp |= (GPMC_CONFIG1_WRITETYPE_SYNC);
+	//tmp |= (GPMC_CONFIG1_READTYPE_SYNC);
 	tmp |= (GPMC_CONFIG1_FCLK_DIV(0));
 	gpmc_cs_write_reg(6, GPMC_CS_CONFIG1, tmp);
 	printk("GPMC_CONFIG1 reg: %x\n", tmp);
@@ -781,12 +781,12 @@ static void __init usrp1_e_init(void)
 
 #if 1
 	// nADV signal timing parameter configuration
-        tmp = 0;
-        tmp |= GPMC_CONFIG3_ADVONTIME(1);
-        tmp |= GPMC_CONFIG3_ADVRDOFFTIME(2);
-        tmp |= GPMC_CONFIG3_ADVWROFFTIME(2);
-        printk("GPMC_CONFIG3 reg: %x\n", tmp);
-        gpmc_cs_write_reg(6, GPMC_CS_CONFIG3, tmp);
+	tmp = 0;
+	tmp |= GPMC_CONFIG3_ADVONTIME(1);
+	tmp |= GPMC_CONFIG3_ADVRDOFFTIME(2);
+	tmp |= GPMC_CONFIG3_ADVWROFFTIME(2);
+	printk("GPMC_CONFIG3 reg: %x\n", tmp);
+	gpmc_cs_write_reg(6, GPMC_CS_CONFIG3, tmp);
 #endif
 
 #if 1
@@ -822,7 +822,6 @@ static void __init usrp1_e_init(void)
 	printk("GPMC_CONFIG6 reg: %x\n", tmp);
 	gpmc_cs_write_reg(6, GPMC_CS_CONFIG6, tmp);
 #endif
-
 }
 
 
