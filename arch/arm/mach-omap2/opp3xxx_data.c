@@ -224,8 +224,10 @@ int __init omap3_opp_init(void)
 		r = omap_init_opp_table(omap34xx_opp_def_list,
 			ARRAY_SIZE(omap34xx_opp_def_list));
 
+#if 0
 		if (omap3_has_720mhz())
 			r = omap3_opp_enable_720Mhz();
+#endif
 	}
 
 	return r;
