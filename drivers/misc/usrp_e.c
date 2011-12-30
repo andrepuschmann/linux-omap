@@ -29,6 +29,7 @@
 #include "linux/poll.h"
 #include "linux/slab.h"
 #include "linux/delay.h"
+#include "linux/gpio.h"
 
 #include "plat/gpmc.h"
 #include "plat/gpio.h"
