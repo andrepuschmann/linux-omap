@@ -620,9 +620,11 @@ static void __init overo_opp_init(void)
 		r |= opp_enable(dev, 1000000000);
 
 		/* Enable IVA 800MHz and lower opps */
-		dev = &dh->od->pdev.dev;
-		r |= opp_enable(dev, 660000000);
-		r |= opp_enable(dev, 800000000);
+		if (omap3_has_iva()) {
+			dev = &dh->od->pdev.dev;
+			r |= opp_enable(dev, 660000000);
+			r |= opp_enable(dev, 800000000);
+		}
 
 		if (r) {
 			pr_err("%s: failed to enable higher opp %d\n",
@@ -634,9 +636,11 @@ static void __init overo_opp_init(void)
 			dev = &mh->od->pdev.dev;
 			opp_disable(dev, 800000000);
 			opp_disable(dev, 1000000000);
-			dev = &dh->od->pdev.dev;
-			opp_disable(dev, 660000000);
-			opp_disable(dev, 800000000);
+			if (omap3_has_iva()) {
+				dev = &dh->od->pdev.dev;
+				opp_disable(dev, 660000000);
+				opp_disable(dev, 800000000);
+			}
 		}
 	}
 	return;
