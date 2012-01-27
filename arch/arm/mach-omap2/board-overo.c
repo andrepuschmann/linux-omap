@@ -839,8 +839,8 @@ static void __init overo_init(void)
 	omap3_mux_init(board_mux, OMAP_PACKAGE_CBB);
 	overo_i2c_init();
 #if defined(CONFIG_PANEL_GENERIC_DPI) || defined(CONFIG_PANEL_GENERIC_DPI_MODULE)
-#if !defined(CONFIG_MACH_USRP_E100)
 	omap_display_init(&overo_dss_data);
+#if !defined(CONFIG_MACH_USRP_E100)
 	overo_display_init();
 #endif
 #endif
