@@ -672,7 +672,6 @@ static void __init overo_opp_init(void)
 static inline void __init overo_init_musb(void)
 {
 	usb_musb_init(NULL);
-}
 #else
 static inline void __init overo_init_musb(void) { return; }
 #endif
