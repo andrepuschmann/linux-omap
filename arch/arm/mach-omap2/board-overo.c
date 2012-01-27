@@ -526,8 +526,8 @@ static int __init overo_i2c_init(void)
 	u32 pdata_flags = 0;
 	u32 regulators_flags = 0;
 
-#if defined(CONFIG_USB_MUSB_OMAP2PLUS) || \
-	defined (CONFIG_USB_MUSB_OMAP2PLUS_MODULE)
+#if defined(CONFIG_USB_MUSB_HDRC) || \
+	defined (CONFIG_USB_MUSB_HDRC_MODULE)
 	pdata_flags |= TWL_COMMON_PDATA_USB;
 #endif
 #if defined(CONFIG_MFD_TWL4030_AUDIO) || \
@@ -642,55 +642,44 @@ static void __init overo_opp_init(void)
 		struct device *mpu_dev, *iva_dev;
 
 		mpu_dev = omap_device_get_by_hwmod_name("mpu");
-		iva_dev = omap_device_get_by_hwmod_name("iva");
 
-		if (!mpu_dev || !iva_dev) {
-			pr_err("%s: Aiee.. no mpu/dsp devices? %p %p\n",
-				__func__, mpu_dev, iva_dev);
+		if (omap3_has_iva())
+			iva_dev = omap_device_get_by_hwmod_name("iva");
+
+		if (!mpu_dev) {
+			pr_err("%s: Aiee.. no mpu device? %p\n",
+				__func__, mpu_dev);
 			return;
 		}
 		/* Enable MPU 1GHz and lower opps */
 		r = opp_enable(mpu_dev, 800000000);
 		r |= opp_enable(mpu_dev, 1000000000);
 
-		/* Enable IVA 800MHz and lower opps */
-		r |= opp_enable(iva_dev, 660000000);
-		r |= opp_enable(iva_dev, 800000000);
+		if (omap3_has_iva()) {
+			/* Enable IVA 800MHz and lower opps */
+			r |= opp_enable(iva_dev, 660000000);
+			r |= opp_enable(iva_dev, 800000000);
+		}
 
 		if (r) {
 			pr_err("%s: failed to enable higher opp %d\n",
 				__func__, r);
-			/*
-			 * Cleanup - disable the higher freqs - we dont care
-			 * about the results
-			 */
 			opp_disable(mpu_dev, 800000000);
 			opp_disable(mpu_dev, 1000000000);
-			opp_disable(iva_dev, 660000000);
-			opp_disable(iva_dev, 800000000);
+			if (omap3_has_iva()) {
+				opp_disable(iva_dev, 660000000);
+				opp_disable(iva_dev, 800000000);
+			}
 		}
 	}
 	return;
 }
 
-#if defined(CONFIG_USB_MUSB_OMAP2PLUS) || \
-	defined (CONFIG_USB_MUSB_OMAP2PLUS_MODULE)
-static struct omap_musb_board_data musb_board_data = {
-	.interface_type		= MUSB_INTERFACE_ULPI,
-#if defined(CONFIG_USB_MUSB_OTG)
-	.mode			= MUSB_OTG,
-#elif defined(CONFIG_USB_GADGET_MUSB_HDRC)
-	.mode			= MUSB_PERIPHERAL,
-#else
-	.mode			= MUSB_HOST,
-#endif
-	.power			= 100,
-};
-
+#if defined(CONFIG_USB_MUSB_HDRC) || \
+	defined (CONFIG_USB_MUSB_HDRC_MODULE)
 static inline void __init overo_init_musb(void)
 {
-	usb_musb_init(&musb_board_data);
-}
+	usb_musb_init(NULL);
 #else
 static inline void __init overo_init_musb(void) { return; }
 #endif

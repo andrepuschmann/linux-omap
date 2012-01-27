@@ -809,6 +809,7 @@ static void __init omap3_beagle_init(void)
 		platform_device_register(&omap_vwlan_device);
 	}
 
+
 	usb_musb_init(&musb_board_data);
 	usbhs_init(&usbhs_bdata);
 	omap_nand_flash_init(NAND_BUSWIDTH_16, omap3beagle_nand_partitions,
