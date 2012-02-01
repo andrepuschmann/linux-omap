@@ -38,8 +38,6 @@
 #include <linux/mtd/partitions.h>
 #include <linux/mmc/host.h>
 
-#include <linux/spi/spi.h>
-
 #include <asm/mach-types.h>
 #include <asm/mach/arch.h>
 #include <asm/mach/flash.h>
@@ -194,6 +192,7 @@ static struct omap_smsc911x_platform_data smsc911x_cfg = {
 	.flags		= SMSC911X_USE_32BIT,
 };
 
+#if !defined(CONFIG_MACH_USRP_E100)
 static struct omap_smsc911x_platform_data smsc911x2_cfg = {
 	.id		= 1,
 	.cs             = OVERO_SMSC911X2_CS,
@@ -201,16 +200,14 @@ static struct omap_smsc911x_platform_data smsc911x2_cfg = {
 	.gpio_reset     = -EINVAL,
 	.flags		= SMSC911X_USE_32BIT,
 };
+#endif
 
 static void __init overo_init_smsc911x(void)
 {
-	unsigned long cs_mem_base, cs_mem_base2;
-
 	gpmc_smsc911x_init(&smsc911x_cfg);
-#if 0
+#if !defined(CONFIG_MACH_USRP_E100)
 	gpmc_smsc911x_init(&smsc911x2_cfg);
 #endif
-
 }
 
 #else
@@ -677,6 +674,7 @@ static inline void __init overo_init_musb(void)
 static inline void __init overo_init_musb(void) { return; }
 #endif
 
+#if defined(CONFIG_MACH_USRP_E100)
 static void __init usrp1_e_init(void)
 {
 	unsigned int tmp;
@@ -684,7 +682,6 @@ static void __init usrp1_e_init(void)
 	printk("Setup up gpmc timing.\n");
 
 	// Set up CS4, data read/write
-
 	gpmc_cs_write_reg(4, GPMC_CS_CONFIG7, 0x0);
 	udelay(100);
 
@@ -823,6 +820,7 @@ static void __init usrp1_e_init(void)
 	gpmc_cs_write_reg(6, GPMC_CS_CONFIG6, tmp);
 #endif
 }
+#endif
 
 
 static void __init overo_init(void)
@@ -831,7 +829,12 @@ static void __init overo_init(void)
 
 	omap3_mux_init(board_mux, OMAP_PACKAGE_CBB);
 	overo_i2c_init();
+#if defined(CONFIG_PANEL_GENERIC_DPI) || defined(CONFIG_PANEL_GENERIC_DPI_MODULE)
 	omap_display_init(&overo_dss_data);
+#if !defined(CONFIG_MACH_USRP_E100)
+	overo_display_init();
+#endif
+#endif
 	omap_serial_init();
 	omap_nand_flash_init(0, overo_nand_partitions,
 			     ARRAY_SIZE(overo_nand_partitions));
@@ -845,7 +848,9 @@ static void __init overo_init(void)
 	overo_opp_init();
 	overo_camera_init();
 
+#if defined(CONFIG_MACH_USRP_E100)
 	usrp1_e_init();
+#endif
 
 	/* Ensure SDRC pins are mux'd for self-refresh */
 	omap_mux_init_signal("sdrc_cke0", OMAP_PIN_OUTPUT);
