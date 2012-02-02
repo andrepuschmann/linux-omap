@@ -666,14 +666,6 @@ static struct omap_musb_board_data musb_board_data = {
 	.power			= 100,
 };
 
-static inline void __init overo_init_musb(void)
-{
-	usb_musb_init(&musb_board_data);
-}
-#else
-static inline void __init overo_init_musb(void) { return; }
-#endif
-
 #if defined(CONFIG_MACH_USRP_E100)
 static void __init usrp1_e_init(void)
 {
