@@ -834,7 +834,6 @@ static void __init overo_init(void)
 	usbhs_init(&usbhs_bdata);
 	overo_spi_init();
 	overo_init_smsc911x();
-	overo_display_init();
 	overo_init_led();
 	overo_init_keys();
 	overo_opp_init();
